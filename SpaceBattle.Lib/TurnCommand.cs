@@ -1,7 +1,7 @@
-namespace SpaceBattle.Lib;
+﻿namespace SpaceBattle.Lib;
 public class Turn : ICommand
 {
-    private ITurnable iturnable;
+    private readonly ITurnable iturnable;
     public Turn(ITurnable turnable)
     {
         iturnable = turnable;
