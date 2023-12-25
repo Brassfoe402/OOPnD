@@ -1,7 +1,6 @@
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
 using Moq;
-using TechTalk.SpecFlow.FileAccess;
 
 namespace SpaceBattle.Lib.Tests;
 
@@ -12,15 +11,19 @@ public class EndMoveCommandTest
         new InitScopeBasedIoCImplementationCommand().Execute();
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
 
-        var EndCommand = (object[] args) => {
+        var EndCommand = (object[] args) =>
+        {
             var mcommand = (IMoveCommandEndable)args[0];
-            return new EndMoveCommand(mcommand); };
-        
-        var InjectCommand = (object[] args) => {
+            return new EndMoveCommand(mcommand);
+        };
+
+        var InjectCommand = (object[] args) =>
+        {
             var LocateInject = (IBridgeCommand)args[0];
             var CommandInject = (ICommand)args[1];
             LocateInject.Inject(CommandInject);
-            return LocateInject; };
+            return LocateInject;
+        };
 
         var MoqCommand = new Mock<ICommand>();
         MoqCommand.Setup(mc => mc.Execute());
@@ -43,7 +46,7 @@ public class EndMoveCommandTest
 
         MoqEnd.Setup(i => i.Uobject).Returns(MoqUobject.Object).Verifiable();
         MoqEnd.Setup(i => i.NameCommand).Returns("Turn").Verifiable();
-        MoqEnd.Setup(i => i.Properties).Returns(new List<string> {"Angle"}).Verifiable();
+        MoqEnd.Setup(i => i.Properties).Returns(new List<string> { "Angle" }).Verifiable();
 
         IoC.Resolve<ICommand>("Command.End", MoqEnd.Object).Execute();
         MoqEnd.VerifyAll();
@@ -56,15 +59,15 @@ public class EndMoveCommandTest
         MoqFirstCommand.Setup(i => i.Execute()).Verifiable();
 
         var MoqSecondCommand = new Mock<ICommand>();
-        MoqSecondCommand.Setup(i=>i.Execute()).Verifiable();
+        MoqSecondCommand.Setup(i => i.Execute()).Verifiable();
 
         var BridgeCommand = new BridgeCommand(MoqFirstCommand.Object);
         BridgeCommand.Execute();
 
-        MoqSecondCommand.Verify(i=>i.Execute(), Times.Never);
+        MoqSecondCommand.Verify(i => i.Execute(), Times.Never);
         BridgeCommand.Inject(MoqSecondCommand.Object);
         BridgeCommand.Execute();
-        MoqSecondCommand.Verify(i=>i.Execute(), Times.Once);
+        MoqSecondCommand.Verify(i => i.Execute(), Times.Once);
     }
 
     [Fact]

@@ -1,16 +1,15 @@
-using Hwdtech;
-using Hwdtech.Ioc;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib;
 
 public class EndMoveCommand : ICommand
 {
-    private IMoveCommandEndable iend;
+    private readonly IMoveCommandEndable iend;
 
     public EndMoveCommand(IMoveCommandEndable end)
     {
         iend = end;
-    } 
+    }
 
     public void Execute()
     {
