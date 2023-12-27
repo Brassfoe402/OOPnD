@@ -1,11 +1,10 @@
-using Hwdtech;
-using Hwdtech.Ioc;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib;
 
 public class BuildDecisionTree : ICommand
 {
-    private IRead iread;
+    private readonly IRead iread;
     public BuildDecisionTree(IRead read)
     {
         iread = read;
@@ -16,7 +15,8 @@ public class BuildDecisionTree : ICommand
 
         var BuildTree = IoC.Resolve<Dictionary<int, object>>("Game.BuildDecisionTree");
 
-        vectors.ForEach(line => {
+        vectors.ForEach(line =>
+        {
             var DecisionTree = BuildTree;
             line.ToList().ForEach(vector =>
             {
