@@ -1,8 +1,6 @@
-﻿using SpaceBattle.Lib;
+﻿namespace SpaceBattle.Lib.Tests;
 
-namespace SpaceBattle.lib.Tests;
-
-public class AngleTest
+public class VectorAngleTest
 {
     [Fact]
     public void VectorAngleHashCode()

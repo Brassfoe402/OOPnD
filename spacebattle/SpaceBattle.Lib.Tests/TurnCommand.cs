@@ -1,5 +1,4 @@
-﻿
-namespace SpaceBattle.Lib.Tests;
+﻿namespace SpaceBattle.Lib.Tests;
 
 public class TurnCommandTest
 {
@@ -23,6 +22,7 @@ public class TurnCommandTest
 
         turnable.VerifyAll();
     }
+
     [Fact]
     public void TheAngleOfGameObjectCanNotBeDefined()
     {
@@ -35,6 +35,7 @@ public class TurnCommandTest
 
         Assert.Throws<Exception>(() => turnCommand.Execute());
     }
+
     [Fact]
     public void TheDeltaAngleOfGameObjectCanNotBeDefined()
     {
@@ -47,6 +48,7 @@ public class TurnCommandTest
 
         Assert.Throws<Exception>(() => turnCommand.Execute());
     }
+
     [Fact]
     public void TheGameObjectCanNotRotateAroundItsOwnAxis()
     {
