@@ -53,7 +53,7 @@ public class TurnTest
         Assert.Throws<NullReferenceException>(() => turn?.Execute());
     }
 
-    [Given(@"угловую скорость корабля определить неозможно")]
+    [Given(@"угловую скорость корабля определить невозможно")]
     public void NanAngleVelocity()
     {
         mq.SetupGet(_mq => _mq.AngleVelocity).Throws<NullReferenceException>();

@@ -175,7 +175,7 @@ this.ScenarioInitialize(scenarioInfo);
 testRunner.Given("космический корабль находится под углом к горизонту в (45) градусов", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Дано ");
 #line hidden
 #line 18
-testRunner.And("угловую скорость корабля определить неозможно", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "И ");
+testRunner.And("угловую скорость корабля определить невозможно", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "И ");
 #line hidden
 #line 19
 testRunner.When("происходит поворот вокруг собственной оси", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Когда ");
@@ -209,7 +209,7 @@ this.ScenarioInitialize(scenarioInfo);
 testRunner.Given("космический корабль находится под углом к горизонту в (45) градусов", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Дано ");
 #line hidden
 #line 24
-testRunner.And("угловую скорость корабля определить неозможно", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "И ");
+testRunner.And("угловую скорость корабля определить невозможно", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "И ");
 #line hidden
 #line 25
 testRunner.And("изменить угол наклона к горизонту невозможно", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "И ");
