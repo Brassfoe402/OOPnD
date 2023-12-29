@@ -1,13 +1,10 @@
 name: SpaceBattle
 
-on:
-  push:
-    branches :
-      - 'lab**'
-  pull_request:
-    types: [opened, reopened]
-  workflow_dispatch:
 
+on:
+  pull_request:
+    branches: ["main"]
+    
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup .NET7
+      - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: 7.0.x
@@ -23,12 +20,11 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore spacebattle
 
-      - name: Test Build
+      - name: Build
         run: dotnet build spacebattle/SpaceBattle.Lib --no-restore /p:ContinuousIntegrationBuild=true
 
-      - name: Turn Test
-        # run: dotnet test spacebattle/SpaceBattle.Lib.Tests /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
-        run: dotnet test spacebattle/SpaceBattle.Lib.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=TestResults/coverage.opencover.xml
-
-      - name: Format
-        run : cd spacebattle && dotnet format --verify-no-changes\
+      - name: SpaceBattle-Unit-Test
+        run: dotnet test spacebattle/SpaceBattle.Lib.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=TestResults/coverage.opencover.xml 
+        
+      - name: Checkstyle
+        run: cd spacebattle && dotnet format --verify-no-changes
