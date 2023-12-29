@@ -10,7 +10,7 @@ public class TurnTest
 
     private readonly Mock<ITurnable> mq = new Mock<ITurnable>();
 
-    private Turn turn;
+    private Turn? turn;
 
     [Given(@"космический корабль находится под углом к горизонту в \((.*)\) градусов")]
     public void SetAngle(int x)
@@ -33,7 +33,7 @@ public class TurnTest
     [Then(@"космический корабль оказывается под углом \((.*)\) градусов к горизонту")]
     public void NewCoords(int x)
     {
-        turn.Execute();
+        turn?.Execute();
 
         var expect = new Angle(x / 45, 8);
         var result = mq.Object.Angle;
@@ -50,7 +50,7 @@ public class TurnTest
     [Then(@"возникает ошибка Exception")]
     public void ThrowException()
     {
-        Assert.Throws<NullReferenceException>(() => turn.Execute());
+        Assert.Throws<NullReferenceException>(() => turn?.Execute());
     }
 
     [Given(@"угловую скорость корабля определить неозможно")]
@@ -62,6 +62,6 @@ public class TurnTest
     [Given(@"изменить угол наклона к горизонту невозможно")]
     public void NoneChangeCoords()
     {
-        mq.SetupSet(_mq => _mq.Angle).Throws<NullReferenceException>();
+        mq.SetupGet(_mq => _mq.Angle).Throws<NullReferenceException>();
     }
 }
