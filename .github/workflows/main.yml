@@ -24,7 +24,13 @@ jobs:
         run: dotnet build spacebattle/SpaceBattle.Lib --no-restore /p:ContinuousIntegrationBuild=true
 
       - name: SpaceBattle-Unit-Test
-        run: dotnet test spacebattle/SpaceBattle.Lib.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=TestResults/coverage.opencover.xml
+        run: dotnet test spacebattle/SpaceBattle.Lib.Tests --collect:"XPlat Code Coverage"
 
       - name: Checkstyle
         run: cd spacebattle && dotnet format --verify-no-changes
+        
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    
