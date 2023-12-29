@@ -1,4 +1,4 @@
-﻿namespace SpaceBattle;
+﻿namespace SpaceBattle.Lib;
 
 public class MacroCommand
 {

@@ -1,7 +1,7 @@
 ﻿using Hwdtech;
 using Hwdtech.Ioc;
 
-namespace SpaceBattle.Tests
+namespace SpaceBattle.Lib.Tests
 {
     public class MacroCommandTest
     {
@@ -17,15 +17,15 @@ namespace SpaceBattle.Tests
             new InitScopeBasedIoCImplementationCommand().Execute();
             IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
 
-            mICommand = new Mock<SpaceBattle.ICommand>();
-            obj = new Mock<SpaceBattle.IUObject>();
+            mICommand = new Mock<SpaceBattle.Lib.ICommand>();
+            obj = new Mock<SpaceBattle.Lib.IUObject>();
             mstring = new Mock<IEnumerable<string>>();
-            strategy = new Mock<SpaceBattle.IStrategy>();
-            new_strategy = new Mock<SpaceBattle.IStrategy>();
-            ReturnCommand = new Mock<SpaceBattle.IStrategy>();
+            strategy = new Mock<SpaceBattle.Lib.IStrategy>();
+            new_strategy = new Mock<SpaceBattle.Lib.IStrategy>();
+            ReturnCommand = new Mock<SpaceBattle.Lib.IStrategy>();
 
-            strategy.Setup(m => m.Invoke(It.IsAny<IEnumerable<SpaceBattle.ICommand>>())).Returns(mICommand.Object).Verifiable();
-            strategy.Setup(m => m.Invoke(It.IsAny<SpaceBattle.IUObject>())).Returns(mICommand.Object).Verifiable();
+            strategy.Setup(m => m.Invoke(It.IsAny<IEnumerable<SpaceBattle.Lib.ICommand>>())).Returns(mICommand.Object).Verifiable();
+            strategy.Setup(m => m.Invoke(It.IsAny<SpaceBattle.Lib.IUObject>())).Returns(mICommand.Object).Verifiable();
             new_strategy.Setup(m => m.Invoke()).Returns(mstring.Object).Verifiable();
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Burn_Fuel", (object[] args) => ReturnCommand.Object.Invoke(args)).Execute();
@@ -36,10 +36,10 @@ namespace SpaceBattle.Tests
         [Fact]
         public void Execute_CallsForEachCommand()
         {
-            var mCommand = new Mock<SpaceBattle.ICommand>();
+            var mCommand = new Mock<SpaceBattle.Lib.ICommand>();
             mCommand.Setup(m => m.Execute()).Verifiable();
 
-            var commands = new List<SpaceBattle.ICommand> { mCommand.Object };
+            var commands = new List<SpaceBattle.Lib.ICommand> { mCommand.Object };
             var macroCommand = new MacroCommand(commands);
 
             macroCommand.Execute();
