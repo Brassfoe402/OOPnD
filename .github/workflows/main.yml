@@ -18,10 +18,10 @@ jobs:
           dotnet-version: 7.0.x
 
       - name: Restore dependencies
-        run: dotnet restore 
+        run: dotnet restore spacebattle
 
       - name: Build
-        run: dotnet build 
+        run: dotnet test spacebattle/SpaceBattle.Lib.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=TestResults/coverage.opencover.xml
 
       - name: SpaceBattle-Unit-Test
         run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
