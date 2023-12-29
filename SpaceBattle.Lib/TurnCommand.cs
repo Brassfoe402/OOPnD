@@ -1,13 +1,13 @@
 ﻿namespace SpaceBattle.Lib;
-public class Turn : ICommand
+public class TurnCommand : ICommand
 {
     private readonly ITurnable iturnable;
-    public Turn(ITurnable turnable)
+    public TurnCommand(ITurnable turnable)
     {
         iturnable = turnable;
     }
     public void Execute()
     {
-        iturnable.Angle += iturnable.AngleVelocity;
+        iturnable.Angle += iturnable.DeltaAngle;
     }
 }

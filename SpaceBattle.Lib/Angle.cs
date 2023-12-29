@@ -1,25 +1,44 @@
 ﻿namespace SpaceBattle.Lib;
 
-public class Angle
+public class VectorAngle
 {
-    public int sector { get; set; }
-    public int separation { get; set; }
-
-    public Angle(int sector, int separation)
+    private int angle;
+    private int parts;
+    public virtual int Angle
     {
-        this.sector = sector;
-        this.separation = separation;
+        get => angle;
+        set => angle = value % parts;
+    }
+    public VectorAngle(int angle, int parts = 360)
+    {
+        this.parts = parts;
+        Angle = angle;
+        Minimize();
+    }
+    private static int GCD(int a, int b)
+    {
+        return b == 0 ? a : GCD(b, a % b);
+    }
+    private void Minimize()
+    {
+        var gcd = GCD(angle, parts);
+        angle /= gcd;
+        parts /= gcd;
     }
 
-    public static Angle operator +(Angle u1, Angle u2)
+    public static VectorAngle operator +(VectorAngle x, VectorAngle y)
     {
-        if (u1.separation == u2.separation)
-        {
-            return new Angle((u1.sector + u2.sector) % u1.separation, u1.separation);
-        }
-        else
-        {
-            throw new Exception();
-        }
+        x.angle = x.angle * y.parts + y.angle * x.parts;
+        x.parts *= y.parts;
+        x.Minimize();
+        return x;
+    }
+    public override bool Equals(object? obj)
+    {
+        return obj is VectorAngle turn && Angle == turn.Angle;
+    }
+    public override int GetHashCode()
+    {
+        return Angle.GetHashCode();
     }
 }

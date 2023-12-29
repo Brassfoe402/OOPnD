@@ -1,67 +1,62 @@
-﻿using Moq;
-using SpaceBattle.Lib;
-using TechTalk.SpecFlow;
+﻿namespace SpaceBattle.Lib.Tests;
 
-namespace SpaceBattle.Tests;
-
-[Binding]
-public class TurnTest
+public class TurnCommandTest
 {
-
-    private readonly Mock<ITurnable> mq = new Mock<ITurnable>();
-
-    private Turn? turn;
-
-    [Given(@"космический корабль находится под углом к горизонту в \((.*)\) градусов")]
-    public void SetAngle(int x)
+    // корабль, который находится под углом к горизонту в 45 градусов 
+    // имеет угловую скорость 90 градусов. 
+    // В результате поворота корабль оказывается под углом 135 градусов к горизонту.
+    [Fact]
+    public void TheGameObjectCanRotateAroundItsOwnAxis() //Игровой объект может перемещаться по прямой
     {
-        mq.SetupProperty(_mq => _mq.Angle, new Angle(x / 45, 8));
+        var turnable = new Mock<ITurnable>();
+
+        turnable.SetupGet(t => t.Angle).Returns(new VectorAngle(45)).Verifiable();
+        turnable.SetupGet(t => t.DeltaAngle).Returns(new VectorAngle(90)).Verifiable();
+
+        ICommand turnCommand = new TurnCommand(turnable.Object);
+
+        turnCommand.Execute();
+
+        turnable.Verify();
+        turnable.VerifySet(t => t.Angle = new VectorAngle(135), Times.Once);
+
+        turnable.VerifyAll();
     }
-
-    [Given(@"имеет угловую скорость \((.*)\) градусов")]
-    public void SetAngleVelocity(int v)
+    [Fact]
+    public void TheAngleOfGameObjectCanNotBeDefined()
     {
-        mq.SetupGet(_mq => _mq.AngleVelocity).Returns(new Angle(v / 45, 8));
+        var turnable = new Mock<ITurnable>();
+
+        turnable.SetupGet(t => t.Angle).Throws(() => new Exception()).Verifiable();
+        turnable.SetupGet(t => t.DeltaAngle).Returns(new VectorAngle(100)).Verifiable();
+
+        ICommand turnCommand = new TurnCommand(turnable.Object);
+
+        Assert.Throws<Exception>(() => turnCommand.Execute());
     }
-
-    [When(@"происходит поворот вокруг собственной оси")]
-    public void Turning()
+    [Fact]
+    public void TheDeltaAngleOfGameObjectCanNotBeDefined()
     {
-        turn = new(mq.Object);
+        var turnable = new Mock<ITurnable>();
+
+        turnable.SetupGet(t => t.Angle).Returns(new VectorAngle(45)).Verifiable();
+        turnable.SetupGet(t => t.DeltaAngle).Throws(() => new Exception()).Verifiable();
+
+        ICommand turnCommand = new TurnCommand(turnable.Object);
+
+        Assert.Throws<Exception>(() => turnCommand.Execute());
     }
-
-    [Then(@"космический корабль оказывается под углом \((.*)\) градусов к горизонту")]
-    public void NewCoords(int x)
+    [Fact]
+    public void TheGameObjectCanNotRotateAroundItsOwnAxis()
     {
-        turn?.Execute();
+        var turnable = new Mock<ITurnable>();
 
-        var expect = new Angle(x / 45, 8);
-        var result = mq.Object.Angle;
+        turnable.SetupGet(t => t.Angle).Returns(new VectorAngle(120)).Verifiable();
+        turnable.SetupGet(t => t.DeltaAngle).Returns(new VectorAngle(90)).Verifiable();
+        turnable.SetupSet(t => t.Angle = It.IsAny<VectorAngle>()).Throws(() => new Exception()).Verifiable();
 
-        Assert.Equal(expect.ToString(), result.ToString());
-    }
+        ICommand turnCommand = new TurnCommand(turnable.Object);
 
-    [Given(@"космический корабль, угол наклона к горизонту которого невозможно определить")]
-    public void NanAngle()
-    {
-        mq.SetupGet(_mq => _mq.Angle).Throws<NullReferenceException>();
-    }
-
-    [Then(@"возникает ошибка Exception")]
-    public void ThrowException()
-    {
-        Assert.Throws<NullReferenceException>(() => turn?.Execute());
-    }
-
-    [Given(@"угловую скорость корабля определить невозможно")]
-    public void NanAngleVelocity()
-    {
-        mq.SetupGet(_mq => _mq.AngleVelocity).Throws<NullReferenceException>();
-    }
-
-    [Given(@"изменить угол наклона к горизонту невозможно")]
-    public void NoneChangeCoords()
-    {
-        mq.SetupGet(_mq => _mq.Angle).Throws<NullReferenceException>();
+        Assert.Throws<Exception>(() => turnCommand.Execute());
     }
 }
